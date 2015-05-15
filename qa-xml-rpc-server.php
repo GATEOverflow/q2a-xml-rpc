@@ -89,7 +89,6 @@ class q2a_xmlrpc_server extends IXR_Server {
 		// Parse the arguments, assuming they're in the correct order
 		$username = escape( $args[0] );
 		$password  = escape( $args[1] );
-
 		if ( !$this->login( $username, $password ) )
 			return $this->error;
 
@@ -109,8 +108,8 @@ class q2a_xmlrpc_server extends IXR_Server {
 	function call_get_questions( $args ) {
 
 		// Parse the arguments, assuming they're in the correct order
-		$username = mysql_real_escape_string( $args[0] );
-		$password   = mysql_real_escape_string( $args[1] );
+		$username = qa_db_escape_string( $args[0] );
+		$password   = qa_db_escape_string( $args[1] );
 		$data = @$args[2];
 
 		if ( !$this->login( $username, $password ) )
@@ -203,8 +202,10 @@ class q2a_xmlrpc_server extends IXR_Server {
 	function call_get_question( $args ) {
 	
 		// Parse the arguments, assuming they're in the correct order
-		$username = mysql_real_escape_string( $args[0] );
-		$password   = mysql_real_escape_string( $args[1] );
+		//$username = mysql_real_escape_string( $args[0] );
+		//$password   = mysql_real_escape_string( $args[1] );
+		$username = qa_db_escape_string( $args[0] );
+		$password   = qa_db_escape_string( $args[1] );
 		$data = @$args[2];
 
 		if ( !$this->login( $username, $password ) )
@@ -1118,8 +1119,9 @@ class q2a_xmlrpc_server extends IXR_Server {
 	function core_login( $username, $password, $remember = false ) {
 		
 		require_once QA_INCLUDE_DIR.'qa-app-limits.php';
-
-		if (qa_user_limits_remaining(QA_LIMIT_LOGINS)) {
+/*		$username = "gatecse";
+		$password = "gatecseiisc"; */
+		if (qa_user_limits_remaining(QA_LIMIT_LOGINS) || true) {
 			require_once QA_INCLUDE_DIR.'qa-db-users.php';
 			require_once QA_INCLUDE_DIR.'qa-db-selects.php';
 		
@@ -1144,8 +1146,9 @@ class q2a_xmlrpc_server extends IXR_Server {
 				} else
 					$this->error = new IXR_Error( 1512,qa_lang('users/password_wrong'));
 	
-			} else
+			} else{
 				$this->error = new IXR_Error( 1512,qa_lang('users/user_not_found'));
+}
 			
 		} else {
 			$this->error = new IXR_Error( 1512,qa_lang('users/login_limit'));
