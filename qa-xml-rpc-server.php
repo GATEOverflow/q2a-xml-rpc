@@ -1121,12 +1121,12 @@ class q2a_xmlrpc_server extends IXR_Server {
 		require_once QA_INCLUDE_DIR.'qa-app-limits.php';
 /*		$username = "gatecse";
 		$password = "gatecseiisc"; */
+		#file_put_contents('/tmp/log/log.txt', print_r($username, true));	
 		if (qa_user_limits_remaining(QA_LIMIT_LOGINS) || true) {
 			require_once QA_INCLUDE_DIR.'qa-db-users.php';
 			require_once QA_INCLUDE_DIR.'qa-db-selects.php';
 		
 			$errors=array();
-			
 			if (qa_opt('allow_login_email_only') || (strpos($username, '@')!==false)) // handles can't contain @ symbols
 				$matchusers=qa_db_user_find_by_email($username);
 			else
